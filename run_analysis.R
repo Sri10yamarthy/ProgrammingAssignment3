@@ -36,6 +36,11 @@ run_analysis<-function(dir) {
     mn_list<-grep("mean",clmn_name)
     final_list<-c(1,mn_list,ncol(rd21))
     final_table1<-rd21[,final_list]
-    write.table(final_table1,file = wrt_dir,row.names = FALSE)
+    ftb1<-factor(final_table1$subjectid)
+    ftb2<-factor(final_table1$activity)
+    tidy_data<-aggregate(final_table1,by=list(ftb1,ftb2),FUN="mean")
+    tidy_clmn_list<-lapply(col_list,function(x) gsub("\\()","",x))
+    colnames(tidy_data)<-tidy_clmn_list
+    write.table(tidy_data,file = wrt_dir,row.names = FALSE)
 }
     
